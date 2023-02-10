@@ -1,0 +1,28 @@
+@model JsViewComponentModel
+<script>
+class AppCatalog extends HTMLElement {
+    constructor() {
+        super();
+    }
+    setInnerHTML(elm, html) {
+        elm.innerHTML = html;
+        Array.from(elm.querySelectorAll("script")).forEach( oldScript => {
+            const newScript = document.createElement("script");
+            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+    }
+    connectedCallback() {
+        fetch("http://localhost:5238/appcatalog/@Model.ClientId").then(response => response.text()).then(html => {
+            const shadow = this.attachShadow({ mode: 'open' });
+            this.setInnerHTML(shadow, html);
+        });
+    }
+}
+(function(){
+    window.customElements.define("app-catalog", AppCatalog);
+    let appCatalog = document.createElement("app-catalog");
+    document.body.appendChild(appCatalog);
+})()
+</script>

@@ -1,0 +1,170 @@
+@page "{clientId}"
+@(Layout = null)
+@functions{
+    [FromRoute]
+    public string? ClientId { get; set; }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', sans-serif;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .wrapper {
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            /*background: linear-gradient(-135deg, #c850c0, #4158d0);*/
+            /* background: linear-gradient(375deg, #1cc7d0, #2ede98); */
+            /* background: linear-gradient(-45deg, #e3eefe 0%, #efddfb 100%);*/
+            /* clip-path: circle(25px at calc(0% + 45px) 45px); */
+            background: #000;
+            clip-path: circle(25px at calc(100% - 45px) 45px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #active:checked~.wrapper {
+            clip-path: circle(75%);
+            position: fixed;
+        }
+        
+        .menu-btn {
+            position: absolute;
+            z-index: 2;
+            right: 20px;
+            /* left: 20px; */
+            top: 20px;
+            height: 50px;
+            width: 50px;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+            /*background: linear-gradient(-135deg, #c850c0, #4158d0);*/
+            /* background: linear-gradient(375deg, #1cc7d0, #2ede98); */
+            /* background: linear-gradient(-45deg, #e3eefe 0%, #efddfb 100%); */
+            background: #000;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #active:checked~.menu-btn {
+            color: #fff;
+        }
+        #active:checked~.menu-btn i>svg {
+            display: none;
+        }
+
+        #active:checked~.menu-btn i:before {
+            content: "\2716";
+            position: fixed;
+        }
+
+        .wrapper ul {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            list-style: none;
+            text-align: center;
+        }
+
+        .wrapper ul li {
+            margin: 15px 0;
+        }
+
+        .wrapper ul li a {
+            color: none;
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: 500;
+            padding: 5px 30px;
+            color: #fff;
+            border-radius: 50px;
+            background: #000;
+            position: relative;
+            line-height: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .wrapper ul li a:after {
+            position: absolute;
+            content: "";
+            background: #fff;
+            background: linear-gradient(#14ffe9, #ffeb3b, #ff00e0);
+            /*background: linear-gradient(375deg, #1cc7d0, #2ede98);*/
+            width: 104%;
+            height: 110%;
+            left: -2%;
+            top: -5%;
+            /* if the font is 'Oswald'*/
+            border-radius: 50px;
+            transform: scaleY(0);
+            z-index: -1;
+            animation: rotate 1.5s linear infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .wrapper ul li a:hover:after {
+            transform: scaleY(1);
+        }
+
+        .wrapper ul li a:hover {
+            color: #fff;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        @@keyframes rotate {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="active">
+    <label for="active" class="menu-btn">
+        <i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px;" fill="#ffffff"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+        </i>
+    </label>
+    <div class="wrapper">
+        <ul>
+            <li><a href="#" class="js-menu-button-home">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Feedback</a></li>
+        </ul>
+    </div>
+    <script>
+        (function(){
+            const root = document.querySelector("app-catalog") 
+                ? document.querySelector("app-catalog").shadowRoot
+                : document.querySelector("body");
+            root.querySelector(".js-menu-button-home").addEventListener("click", (e) => {
+                e.preventDefault();
+                alert("@ClientId");
+            });
+        })();
+    </script>
+</body>
+</html>

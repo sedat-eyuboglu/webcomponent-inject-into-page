@@ -1,0 +1,25 @@
+@page "{jsClient}"
+@using System.Text;
+@using System.Text.RegularExpressions;
+
+@(Layout = "_JsComponentLayout")
+
+@functions{
+    private static readonly string JsPattern = @"^<script[^>]*>(.*)</script>$";
+    
+    public async Task<IActionResult> OnGetAsync(string jsClient)
+    {
+        var htmlContent = await Component.InvokeAsync<JsComponentViewComponent>(new { jsClient });
+        var jsContent = new StringBuilder();
+        using(var sw = new StringWriter(jsContent))
+        {
+            htmlContent.WriteTo(sw, HtmlEncoder);
+        }
+        var js = Regex.Replace(jsContent.ToString(), JsPattern, "$1", RegexOptions.Singleline);
+        var contentResult = new ContentResult();
+        contentResult.Content = js;
+        contentResult.ContentType = "text/javascript";
+        contentResult.StatusCode = (int)System.Net.HttpStatusCode.OK;
+        return contentResult;
+    }
+}
